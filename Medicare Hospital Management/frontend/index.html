@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospital & Emergency Management System</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+    background: #f4f7fb;
+    color: #243247;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 255px;
+    background: #102d46;
+    color: white;
+    padding: 25px 16px;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+.logo span {
+    color: #35c6b0;
+}
+
+.subtitle {
+    color: #a9bdce;
+    font-size: 12px;
+    padding: 8px 10px 25px;
+}
+
+.menu-title {
+    color: #8199ad;
+    font-size: 11px;
+    padding: 12px 10px;
+    letter-spacing: 1px;
+}
+
+.nav-btn {
+    display: block;
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: #d6e1eb;
+    padding: 13px 12px;
+    text-align: left;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: #1c526e;
+    color: white;
+}
+
+/* MAIN AREA */
+.main {
+    margin-left: 255px;
+    width: calc(100% - 255px);
+    padding: 28px 35px;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 17px 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px #18344b0d;
+    margin-bottom: 28px;
+}
+
+.topbar h2 {
+    font-size: 19px;
+    color: #173d59;
+}
+
+.admin {
+    background: #e5f5f3;
+    color: #087d70;
+    padding: 9px 15px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.welcome {
+    margin-bottom: 25px;
+}
+
+.welcome h1 {
+    font-size: 27px;
+    color: #173d59;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    color: #78889b;
+    font-size: 14px;
+}
+
+/* DASHBOARD CARDS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px #18344b0b;
+    border: 1px solid #edf1f5;
+}
+
+.stat-icon {
+    font-size: 27px;
+    margin-bottom: 14px;
+}
+
+.stat-card h3 {
+    color: #718096;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.stat-card strong {
+    font-size: 27px;
+    color: #173d59;
+}
+
+/* CONTENT BOX */
+.content-box {
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px #18344b0b;
+    margin-bottom: 25px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    font-size: 19px;
+    color: #173d59;
+}
+
+.search {
+    padding: 11px 14px;
+    border: 1px solid #dce4ec;
+    border-radius: 7px;
+    outline: none;
+    width: 230px;
+    max-width: 100%;
+}
+
+.search:focus,
+input:focus,
+select:focus {
+    border-color: #168f9c;
+}
+
+/* FORM */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 18px;
+}
+
+.form-field label {
+    display: block;
+    font-size: 13px;
+    color: #526579;
+    margin-bottom: 7px;
+}
+
+.form-field input {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #dce4ec;
+    border-radius: 7px;
+    outline: none;
+}
+
+.primary-btn {
+    background: #087f8c;
+    color: white;
+    border: none;
+    padding: 11px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.primary-btn:hover {
+    background: #066b77;
+}
+
+.delete-btn {
+    background: #fff0f0;
+    color: #d33c3c;
+    border: none;
+    padding: 7px 11px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* TABLE */
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+}
+
+th {
+    background: #edf5f8;
+    color: #35566c;
+    text-align: left;
+    padding: 14px;
+    font-size: 13px;
+}
+
+td {
+    padding: 14px;
+    border-bottom: 1px solid #edf1f5;
+    font-size: 13px;
+    color: #526579;
+}
+
+.empty {
+    text-align: center;
+    padding: 25px;
+    color: #8a98a8;
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: #8997a6;
+    font-size: 12px;
+}
+
+@media(max-width: 900px) {
+    .sidebar {
+        width: 210px;
+    }
+    .main {
+        margin-left: 210px;
+        width: calc(100% - 210px);
+        padding: 20px;
+    }
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 600px) {
+    .sidebar {
+        width: 70px;
+        padding: 15px 6px;
+    }
+    .logo {
+        font-size: 12px;
+    }
+    .subtitle, .menu-title {
+        display: none;
+    }
+    .nav-btn {
+        font-size: 0;
+        text-align: center;
+        padding: 12px 2px;
+    }
+    .nav-btn span {
+        font-size: 19px;
+    }
+    .main {
+        margin-left: 70px;
+        width: calc(100% - 70px);
+        padding: 12px;
+    }
+    .stats {
+        grid-template-columns: 1fr;
+    }
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    .welcome h1 {
+        font-size: 21px;
+    }
+    .topbar {
+        padding: 13px;
+    }
+    .topbar h2 {
+        font-size: 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="logo">✚ Medi<span>Care</span></div>
+    <div class="subtitle">Hospital Management System</div>
+
+    <div class="menu-title">MAIN MENU</div>
+
+    <button class="nav-btn active" onclick="showPage('dashboard',this)">
+        <span>▦</span> Dashboard
+    </button>
+
+    <div class="menu-title">MANAGEMENT</div>
+
+    <button class="nav-btn" onclick="showPage('hospital',this)"><span>🏥</span> Hospitals</button>
+    <button class="nav-btn" onclick="showPage('department',this)"><span>▤</span> Departments</button>
+    <button class="nav-btn" onclick="showPage('doctor',this)"><span>👨‍⚕️</span> Doctors</button>
+    <button class="nav-btn" onclick="showPage('patient',this)"><span>🧑</span> Patients</button>
+    <button class="nav-btn" onclick="showPage('appointment',this)"><span>📅</span> Appointments</button>
+    <button class="nav-btn" onclick="showPage('bed',this)"><span>🛏️</span> Beds</button>
+
+    <div class="menu-title">EMERGENCY SERVICES</div>
+
+    <button class="nav-btn" onclick="showPage('emergency',this)"><span>🚨</span> Emergencies</button>
+    <button class="nav-btn" onclick="showPage('service',this)"><span>🚑</span> Emergency Services</button>
+    <button class="nav-btn" onclick="showPage('ambulance',this)"><span>🚐</span> Ambulances</button>
+
+    <div class="menu-title">LOCATION MANAGEMENT</div>
+
+    <button class="nav-btn" onclick="showPage('location',this)"><span>📍</span> Locations</button>
+    <button class="nav-btn" onclick="showPage('area',this)"><span>🌐</span> Areas</button>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+    <div class="topbar">
+        <h2>Hospital Administration</h2>
+        <div class="admin">● Administrator</div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <section id="dashboard" class="page active">
+
+        <div class="welcome">
+            <h1>Welcome to MediCare 👋</h1>
+            <p>Hospital and Emergency Services Management Dashboard</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">🏥</div>
+                <h3>Total Hospitals</h3>
+                <strong id="hospitalCount">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">👨‍⚕️</div>
+                <h3>Total Doctors</h3>
+                <strong id="doctorCount">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🧑</div>
+                <h3>Total Patients</h3>
+                <strong id="patientCount">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">📅</div>
+                <h3>Appointments</h3>
+                <strong id="appointmentCount">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🛏️</div>
+                <h3>Total Beds</h3>
+                <strong id="bedCount">0</strong>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🚨</div>
+                <h3>Emergencies</h3>
+                <strong id="emergencyCount">0</strong>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <div class="section-heading">
+                <h2>System Overview</h2>
+            </div>
+            <p style="color:#718096;line-height:1.8;font-size:14px">
+                This system helps manage hospital information, departments,
+                doctors, patients, appointments, beds, emergency records,
+                emergency services, ambulances and locations.
+                Select any section from the sidebar to manage its records.
+            </p>
+        </div>
+    </section>
+
+    <!-- ENTITY PAGES ARE CREATED BY JAVASCRIPT -->
+    <div id="entityPages"></div>
+
+    <div class="footer">
+        © 2026 MediCare | Hospital and Emergency Services Management System
+    </div>
+
+</main>
+</div>
+
+<script>
+const API_URL = "http://localhost:8080/api";
+
+// Frontend entities mapped to your MySQL tables.
+const entities = {
+    hospital: {
+        title: "Hospital Management",
+        resource: "hospitals",
+        id: "hospital_id",
+        idLabel: "Hospital ID",
+        fields: [
+            { name: "name", label: "Hospital Name" },
+            { name: "phone", label: "Phone Number" },
+            { name: "address", label: "Address" },
+            { name: "location", label: "Location" },
+            { name: "total_beds", label: "Total Beds", type: "number" },
+            { name: "facilities", label: "Facilities" }
+        ]
+    },
+
+    department: {
+        title: "Department Management",
+        resource: "departments",
+        id: "department_id",
+        idLabel: "Department ID",
+        fields: [
+            { name: "name", label: "Department Name" },
+            { name: "description", label: "Description" },
+            { name: "hospital_id", label: "Hospital ID", type: "number" }
+        ]
+    },
+
+    doctor: {
+        title: "Doctor Management",
+        resource: "doctors",
+        id: "doctor_id",
+        idLabel: "Doctor ID",
+        fields: [
+            { name: "name", label: "Doctor Name" },
+            { name: "specialization", label: "Specialization" },
+            { name: "phone", label: "Phone Number" },
+            { name: "email", label: "Email", type: "email" },
+            { name: "hospital_id", label: "Hospital ID", type: "number" },
+            { name: "department_id", label: "Department ID", type: "number" }
+        ]
+    },
+
+    patient: {
+        title: "Patient Management",
+        resource: "patients",
+        id: "patient_id",
+        idLabel: "Patient ID",
+        fields: [
+            { name: "name", label: "Patient Name" },
+            { name: "age", label: "Age", type: "number" },
+            {
+                name: "gender",
+                label: "Gender",
+                type: "select",
+                options: ["Male", "Female", "Other"]
+            },
+            { name: "phone", label: "Phone Number" },
+            { name: "address", label: "Address" }
+        ]
+    },
+
+    appointment: {
+        title: "Appointment Management",
+        resource: "appointments",
+        id: "appointment_id",
+        idLabel: "Appointment ID",
+        fields: [
+            { name: "patient_id", label: "Patient ID", type: "number" },
+            { name: "doctor_id", label: "Doctor ID", type: "number" },
+            { name: "appointment_date", label: "Appointment Date", type: "date" },
+            { name: "appointment_time", label: "Appointment Time", type: "time" },
+            {
+                name: "status",
+                label: "Status",
+                type: "select",
+                options: ["Scheduled", "Completed", "Cancelled"]
+            },
+            { name: "notes", label: "Notes" }
+        ]
+    },
+
+    bed: {
+        title: "Bed Management",
+        resource: "beds",
+        id: "bed_id",
+        idLabel: "Bed ID",
+        fields: [
+            { name: "bed_type", label: "Bed Type" },
+            {
+                name: "status",
+                label: "Bed Status",
+                type: "select",
+                options: ["Available", "Occupied", "Maintenance"]
+            },
+            { name: "room_no", label: "Room Number" },
+            { name: "hospital_id", label: "Hospital ID", type: "number" },
+            { name: "department_id", label: "Department ID", type: "number" }
+        ]
+    },
+
+    emergency: {
+        title: "Emergency Management",
+        resource: "emergencies",
+        id: "emergency_id",
+        idLabel: "Emergency ID",
+        fields: [
+            { name: "patient_id", label: "Patient ID", type: "number" },
+            { name: "hospital_id", label: "Hospital ID", type: "number" },
+            { name: "emergency_type", label: "Emergency Type" },
+            { name: "description", label: "Description" },
+            {
+                name: "status",
+                label: "Status",
+                type: "select",
+                options: ["Pending", "In Progress", "Resolved"]
+            }
+        ]
+    },
+
+    service: {
+        title: "Emergency Service Management",
+        resource: "emergency-services",
+        id: "service_id",
+        idLabel: "Service ID",
+        fields: [
+            { name: "type", label: "Service Type" },
+            { name: "description", label: "Description" },
+            { name: "contact_no", label: "Contact Number" },
+            { name: "hospital_id", label: "Hospital ID", type: "number" }
+        ]
+    },
+
+    ambulance: {
+        title: "Ambulance Management",
+        resource: "ambulances",
+        id: "ambulance_id",
+        idLabel: "Ambulance ID",
+        fields: [
+            { name: "vehicle_no", label: "Vehicle Number" },
+            { name: "type", label: "Ambulance Type" },
+            {
+                name: "status",
+                label: "Availability",
+                type: "select",
+                options: ["Available", "On Duty", "Maintenance"]
+            },
+            { name: "hospital_id", label: "Hospital ID", type: "number" },
+            { name: "driver_name", label: "Driver Name" },
+            { name: "phone", label: "Phone Number" }
+        ]
+    },
+
+    location: {
+        title: "Location Management",
+        resource: "locations",
+        id: "location_id",
+        idLabel: "Location ID",
+        fields: [
+            { name: "name", label: "Location Name" },
+            { name: "address", label: "Address" },
+            { name: "latitude", label: "Latitude", type: "number" },
+            { name: "longitude", label: "Longitude", type: "number" },
+            { name: "area_id", label: "Area ID", type: "number" }
+        ]
+    },
+
+    area: {
+        title: "Area Management",
+        resource: "areas",
+        id: "area_id",
+        idLabel: "Area ID",
+        fields: [
+            { name: "name", label: "Area Name" },
+            { name: "type", label: "Area Type" },
+            { name: "description", label: "Description" }
+        ]
+    }
+};
+
+// Records retrieved from the backend.
+const records = {};
+
+Object.keys(entities).forEach(key => {
+    records[key] = [];
+});
+
+
+// Generate forms and tables.
+const entityPages = document.getElementById("entityPages");
+
+Object.keys(entities).forEach(key => {
+    const entity = entities[key];
+
+    const section = document.createElement("section");
+    section.id = key;
+    section.className = "page";
+
+    section.innerHTML = `
+        <div class="welcome">
+            <h1>${entity.title}</h1>
+            <p>Add, view and manage ${entity.title.toLowerCase()} records.</p>
+        </div>
+
+        <div class="content-box">
+            <div class="section-heading">
+                <h2>Add New Record</h2>
+            </div>
+
+            <form id="${key}Form">
+                <div class="form-grid">
+                    ${entity.fields.map(field => `
+                        <div class="form-field">
+                            <label>${field.label}</label>
+
+                            ${
+                                field.type === "select"
+                                ? `<select name="${field.name}" required
+                                     style="width:100%;padding:11px;border:1px solid #dce4ec;border-radius:7px">
+                                     <option value="">Select ${field.label}</option>
+                                     ${field.options.map(option =>
+                                         `<option value="${option}">${option}</option>`
+                                     ).join("")}
+                                   </select>`
+                                : `<input
+                                     type="${field.type || "text"}"
+                                     name="${field.name}"
+                                     placeholder="Enter ${field.label}"
+                                     required>`
+                            }
+                        </div>
+                    `).join("")}
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    + Add Record
+                </button>
+            </form>
+        </div>
+
+        <div class="content-box">
+            <div class="section-heading">
+                <h2>${entity.title} Records</h2>
+                <input class="search"
+                    id="${key}Search"
+                    placeholder="Search records...">
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead id="${key}Head"></thead>
+                    <tbody id="${key}Body"></tbody>
+                </table>
+            </div>
+        </div>
+    `;
+
+    entityPages.appendChild(section);
+
+    document.getElementById(key + "Search").addEventListener(
+        "input",
+        () => renderTable(key)
+    );
+
+    document.getElementById(key + "Form").addEventListener(
+        "submit",
+        async event => {
+            event.preventDefault();
+
+            const formData = new FormData(event.target);
+            const body = {};
+
+            entity.fields.forEach(field => {
+                const value = formData.get(field.name);
+
+                if (value !== null && value.trim() !== "") {
+                    body[field.name] =
+                        field.type === "number"
+                        ? Number(value)
+                        : value.trim();
+                }
+            });
+
+            try {
+                const response = await fetch(
+                    `${API_URL}/${entity.resource}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Unable to add record."
+                    );
+                }
+
+                alert("Record added successfully to MySQL!");
+
+                event.target.reset();
+
+                await loadRecords(key);
+                updateDashboard();
+
+            } catch (error) {
+                console.error("Add record error:", error);
+
+                alert(
+                    "Could not add record.\n\n" +
+                    error.message +
+                    "\n\nCheck the backend and database."
+                );
+            }
+        }
+    );
+});
+
+
+// Retrieve records from the Spring Boot API.
+async function loadRecords(key) {
+    const entity = entities[key];
+
+    try {
+        const url = `http://localhost:8080/api/${entity.resource}`;
+
+        console.log("Loading records from:", url);
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Could not retrieve records.");
+        }
+
+        records[key] = result.data || [];
+
+        renderTable(key);
+        return true;
+
+    } catch (error) {
+        console.error(`Error loading ${entity.title}:`, error);
+
+        records[key] = [];
+        renderTable(key);
+        return false;
+    }
+}
+
+// Load all entities when the website starts.
+async function loadAllRecords() {
+    const results = await Promise.all(
+        Object.keys(entities).map(key => loadRecords(key))
+    );
+
+    updateDashboard();
+
+    const successfulLoads = results.filter(Boolean).length;
+
+    console.log(
+        `Loaded ${successfulLoads} of ${results.length} sections.`
+    );
+
+    if (successfulLoads === 0) {
+        alert(
+            "Could not load records from the backend. " +
+            "Check whether Spring Boot is running."
+        );
+    }
+}
+
+
+// Show the selected page.
+function showPage(pageId, button) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+    });
+
+    document.getElementById(pageId).classList.add("active");
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    document.querySelector(".topbar h2").textContent =
+        pageId === "dashboard"
+        ? "Hospital Administration"
+        : entities[pageId].title;
+}
+
+
+// Display database records in the tables.
+function renderTable(key) {
+    const entity = entities[key];
+
+    const searchInput = document.getElementById(key + "Search");
+    const searchValue = searchInput.value.toLowerCase();
+
+    const head = document.getElementById(key + "Head");
+    const body = document.getElementById(key + "Body");
+
+    head.innerHTML = "";
+    body.innerHTML = "";
+
+    const columns = [
+        { name: entity.id, label: entity.idLabel },
+        ...entity.fields
+    ];
+
+    const headerRow = document.createElement("tr");
+
+    columns.forEach(column => {
+        const th = document.createElement("th");
+        th.textContent = column.label;
+        headerRow.appendChild(th);
+    });
+
+    const actionHeading = document.createElement("th");
+    actionHeading.textContent = "Action";
+    headerRow.appendChild(actionHeading);
+
+    head.appendChild(headerRow);
+
+    const filteredRecords = records[key].filter(record =>
+        columns.some(column =>
+            String(record[column.name] ?? "")
+                .toLowerCase()
+                .includes(searchValue)
+        )
+    );
+
+    if (filteredRecords.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = columns.length + 1;
+        cell.className = "empty";
+        cell.textContent =
+            "No records found, or the records could not be loaded.";
+
+        row.appendChild(cell);
+        body.appendChild(row);
+
+        return;
+    }
+
+    filteredRecords.forEach(record => {
+        const row = document.createElement("tr");
+
+        columns.forEach(column => {
+            const cell = document.createElement("td");
+            cell.textContent = record[column.name] ?? "";
+            row.appendChild(cell);
+        });
+
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "delete-btn";
+
+        deleteButton.addEventListener("click", async () => {
+            const id = record[entity.id];
+
+            if (!confirm("Are you sure you want to delete this record?")) {
+                return;
+            }
+
+            try {
+                const response = await fetch(
+                    `${API_URL}/${entity.resource}/${encodeURIComponent(id)}`,
+                    { method: "DELETE" }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Could not delete record."
+                    );
+                }
+
+                alert("Record deleted successfully from MySQL!");
+
+                await loadRecords(key);
+                updateDashboard();
+
+            } catch (error) {
+                console.error("Delete error:", error);
+                alert("Delete failed: " + error.message);
+            }
+        });
+
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+        body.appendChild(row);
+    });
+}
+
+
+// Update dashboard counts using database records.
+function updateDashboard() {
+    document.getElementById("hospitalCount").textContent =
+        records.hospital.length;
+
+    document.getElementById("doctorCount").textContent =
+        records.doctor.length;
+
+    document.getElementById("patientCount").textContent =
+        records.patient.length;
+
+    document.getElementById("appointmentCount").textContent =
+        records.appointment.length;
+
+    document.getElementById("bedCount").textContent =
+        records.bed.length;
+
+    document.getElementById("emergencyCount").textContent =
+        records.emergency.length;
+}
+
+
+// Start loading data.
+loadAllRecords();
+</script>
+
+</body>
+</html>
